@@ -1,12 +1,14 @@
+
 # Link Prediction for Microservice Call Graphs: Temporal Windows and Scalability Tradeoffs
 
-This repository contains a comprehensive implementation of link prediction models for microservice call graphs, focusing on temporal dynamics and scalability considerations. The project implements multiple deep learning architectures and evaluates their performance on temporal network data.
+This repository contains an implementation of link prediction models for microservice call graphs, emphasizing temporal dynamics and scalability. It implements multiple deep learning architectures, includes a third-party NodeSim module from previous research, and evaluates performance using real-world datasets.
 
-## 📋 Table of Contents
+## Table of Contents
 
 - [Overview](#overview)
 - [Project Structure](#project-structure)
 - [Models Implemented](#models-implemented)
+- [Datasets](#datasets)
 - [Features](#features)
 - [Installation](#installation)
 - [Usage](#usage)
@@ -14,210 +16,142 @@ This repository contains a comprehensive implementation of link prediction model
 - [Paper](#paper)
 - [Contributing](#contributing)
 
-## 🎯 Overview
+## Overview
 
-This project addresses the challenge of predicting future connections in microservice call graphs using temporal network analysis. The implementation includes:
+This project addresses the challenge of predicting future connections in microservice call graphs through temporal network analysis. Key aspects include:
 
-- **Multiple Model Architectures**: GAT, Diffusion, Transformer, LSTM, and hybrid models
-- **Temporal Window Processing**: Time-based graph segmentation for dynamic analysis
-- **Advanced Negative Sampling**: Sophisticated sampling strategies for training
-- **Comprehensive Evaluation**: Multiple metrics including AUC, MRR, Precision, Recall, and F1-score
-- **NodeSim Integration**: Community-aware node similarity for enhanced embeddings
+- **Multiple Model Architectures**: GAT, Diffusion, Transformer, LSTM, hybrid models, and NodeSim.
+- **Temporal Window Processing**: Dynamic segmentation of call graphs based on timestamps.
+- **Advanced Negative Sampling**: Sophisticated strategies to enhance training.
+- **Evaluation Metrics**: AUC, MRR, Precision, Recall, F1-score, Accuracy.
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 LinkPrediction-Extention-main/
 ├── Code/
-│   ├── LinkPrediction.ipynb          # Main Jupyter notebook for experiments
-│   ├── evaluate.py                   # Evaluation metrics and functions
-│   ├── negative_sampling.py          # Advanced negative sampling strategies
+│   ├── LinkPrediction.ipynb          # Main experiments notebook
+│   ├── evaluate.py                   # Evaluation functions
+│   ├── negative_sampling.py          # Negative sampling strategies
 │   ├── Models/
-│   │   ├── GNN_Model.py             # Graph Attention Network (GAT) implementation
-│   │   ├── Standalone_Diffusion_Model.py  # Diffusion-based model
-│   │   ├── Diffusion_GAT_Model.py   # Hybrid Diffusion + GAT model
-│   │   ├── Standalone_Transformer_Model.py  # Transformer-only model
-│   │   └── Transformer_GAT_Model.py # Hybrid Transformer + GAT model
+│   │   ├── GNN_Model.py              # GAT implementation
+│   │   ├── Standalone_Diffusion_Model.py
+│   │   ├── Diffusion_GAT_Model.py
+│   │   ├── Standalone_Transformer_Model.py
+│   │   └── Transformer_GAT_Model.py
 │   ├── LSTM/
-│   │   └── main.py                  # LSTM-based link prediction
-│   └── NodeSim/
-│       ├── src/                     # NodeSim source code
-│       ├── Input/                   # Input data files
-│       ├── Output/                  # Generated embeddings
-│       └── Adjusted/                # Modified NodeSim implementations
+│   │   └── main.py
+│   └── NodeSim/                      # External module from another paper
+│       ├── src/
+│       ├── Input/
+│       ├── Output/
+│       └── Adjusted/
 ├── Paper/
 │   └── Link_Prediction_for_Microservice_Call_Graphs_Temporal_Windows_and_Scalability_Tradeoffs.pdf
 └── Results/
-    ├── Results final.pdf            # Final evaluation results
-    ├── StandaloneDiffusion.zip      # Diffusion model results
-    └── transformer.zip              # Transformer model results
+    ├── Results final.pdf             # Partial evaluation results
+    ├── StandaloneDiffusion.zip
+    └── transformer.zip
 ```
 
-## 🤖 Models Implemented
+## Models Implemented
 
 ### 1. **Graph Attention Network (GAT)**
 - **File**: `Code/Models/GNN_Model.py`
-- **Features**: Multi-head attention mechanism, edge-aware processing
-- **Use Case**: Capturing complex node relationships in call graphs
+- **Features**: Multi-head attention, edge-aware.
 
 ### 2. **Diffusion Model**
 - **File**: `Code/Models/Standalone_Diffusion_Model.py`
-- **Features**: APPNP-based diffusion, global information propagation
-- **Use Case**: Long-range dependency modeling
+- **Features**: Global diffusion-based information propagation.
 
 ### 3. **Transformer Model**
 - **File**: `Code/Models/Standalone_Transformer_Model.py`
-- **Features**: Self-attention mechanism, positional embeddings
-- **Use Case**: Sequence-aware link prediction
+- **Features**: Self-attention, positional encoding.
 
 ### 4. **LSTM Model**
 - **File**: `Code/LSTM/main.py`
-- **Features**: Sequential processing, temporal dependencies
-- **Use Case**: Time-series based prediction
+- **Features**: Sequential modeling, temporal dependencies.
 
 ### 5. **Hybrid Models**
-- **Diffusion + GAT**: `Code/Models/Diffusion_GAT_Model.py`
-- **Transformer + GAT**: `Code/Models/Transformer_GAT_Model.py`
-- **Features**: Combines benefits of multiple architectures
+- **Diffusion + GAT**: `Diffusion_GAT_Model.py`
+- **Transformer + GAT**: `Transformer_GAT_Model.py`
+- **Features**: Combines multiple architectures' strengths.
 
-### 6. **NodeSim Integration**
+### 6. **NodeSim** *(Third-party Integration)*
 - **Directory**: `Code/NodeSim/`
-- **Features**: Community-aware node similarity, enhanced embeddings
-- **Use Case**: Improved node representation learning
+- **Note**: Adapted from existing work for community-aware embeddings.
+- **Use Case**: Node similarity enhancement.
 
-## ✨ Features
+## Datasets
 
-### Temporal Processing
-- **Time Windows**: Configurable temporal segmentation
-- **Dynamic Graphs**: Time-evolving network structures
-- **Temporal Features**: Timestamp-aware edge attributes
+The experiments use publicly available datasets:
+- [Alibaba Microservices 2022](https://github.com/alibaba/clusterdata/tree/master/cluster-trace-microservices-v2022)
+- [Alibaba Microservices 2021](https://github.com/alibaba/clusterdata/tree/master/cluster-trace-microservices-v2021)
+- [Huawei Cloud Trace](https://zenodo.org/record/5638238)
 
-### Advanced Training
-- **Negative Sampling**: Sophisticated sampling strategies
-- **Cross-Validation**: K-fold validation for robust evaluation
-- **Early Stopping**: Patience-based training termination
-- **Multi-Seed Experiments**: Reproducible results across seeds
+## Features
 
-### Evaluation Metrics
-- **AUC-ROC**: Area under the receiver operating characteristic curve
-- **MRR**: Mean Reciprocal Rank
-- **Precision/Recall/F1**: Classification performance metrics
-- **Accuracy**: Overall prediction accuracy
-- **Confusion Matrix**: Detailed error analysis
+- **Temporal Processing**: Configurable time windows, dynamic graph handling.
+- **Advanced Training**: Negative sampling, cross-validation, multi-seed experiments.
+- **Evaluation Metrics**: Robust performance measurement with multiple criteria.
 
-## 🚀 Installation
+## Installation
 
 ### Prerequisites
 - Python 3.8+
 - PyTorch 1.9+
 - PyTorch Geometric
 - TensorFlow 2.x
-- NetworkX
-- NumPy, Pandas, Scikit-learn
+- NetworkX, NumPy, Pandas, Scikit-learn
 
 ### Setup
 ```bash
-# Clone the repository
 git clone <repository-url>
 cd LinkPrediction-Extention-main
 
-# Install PyTorch Geometric
+# PyTorch Geometric
 pip install torch_geometric
 
-# Install TensorFlow for LSTM
+# TensorFlow for LSTM
 pip install tensorflow
 
-# Install other dependencies
+# Other dependencies
 pip install networkx numpy pandas scikit-learn matplotlib
 ```
 
-## 📖 Usage
+## Usage
 
-### Main Experiment Notebook
-The primary interface is through the Jupyter notebook:
+### Main Notebook
+Run experiments via the provided notebook:
 
-```python
-# Open the main notebook
+```bash
 jupyter notebook Code/LinkPrediction.ipynb
 ```
 
 ### Model Selection
-In the notebook, you can select different models:
+In the notebook, select your model:
 
 ```python
-selected_model = "GAT"  # Options: "GAT", "Diffusion", "DiffusionGAT", 
-                        # "Transformer", "TransformerGAT", "LSTM"
+selected_model = "GAT"  # Options: "GAT", "Diffusion", "DiffusionGAT", "Transformer", "TransformerGAT", "LSTM"
 ```
 
-### Configuration Parameters
-```python
-# Temporal parameters
-time_window_size = 100
-train_time_end = 7000
-test_time_start = 7000
-test_time_end = 10000
+### NodeSim Module Usage
 
-# Model parameters
-embedding_dim = 64
-patience = 10
-min_epochs = 30
-```
-
-### Running Experiments
-```python
-# The notebook automatically handles:
-# 1. Data loading and preprocessing
-# 2. Time window creation
-# 3. Model training and validation
-# 4. Performance evaluation
-# 5. Results visualization
-```
-
-### NodeSim Usage
 ```bash
 cd Code/NodeSim/src
 python main.py --input Input/sample.txt --output Output/sample.emb --dimensions 128
 ```
 
-## 📊 Results
+## Results
 
-The project includes comprehensive evaluation results:
+The provided results (`Results final.pdf`) are a subset demonstrating key findings and metrics, as full results are extensive. Additional detailed outcomes are compressed into zip files for specific models.
 
-- **Model Comparison**: Performance across different architectures
-- **Temporal Analysis**: Impact of time windows on prediction accuracy
-- **Scalability Study**: Tradeoffs between model complexity and performance
-- **Community Effects**: NodeSim integration benefits
+## Paper
 
-Key findings are documented in:
-- `Paper/Link_Prediction_for_Microservice_Call_Graphs_Temporal_Windows_and_Scalability_Tradeoffs.pdf`
-- `Results/Results final.pdf`
+The accompanying research paper offers a comprehensive analysis, including methodology, experiments, temporal windowing effects, and scalability trade-offs.
 
-## 📄 Paper
+See: [Paper PDF](Paper/Link_Prediction_for_Microservice_Call_Graphs_Temporal_Windows_and_Scalability_Tradeoffs.pdf)
 
-The accompanying research paper provides detailed analysis of:
-- Temporal window effects on link prediction
-- Scalability tradeoffs in different model architectures
-- Community-aware approaches for microservice call graphs
-- Experimental methodology and results
+## Contributing
 
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit pull requests or open issues for:
-- Bug fixes
-- New model implementations
-- Performance improvements
-- Documentation enhancements
-
-## 📝 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## 🙏 Acknowledgments
-
-- PyTorch Geometric team for the graph neural network framework
-- NodeSim authors for the community-aware embedding approach
-- Research community for foundational work in link prediction
-
----
-
-**Note**: This project is designed for research purposes and microservice call graph analysis. For production use, additional validation and testing is recommended. 
+Contributions, suggestions, and improvements are welcome. Please fork the repository, create your branch, and submit a pull request.
