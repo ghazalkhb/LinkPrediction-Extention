@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torch.nn import TransformerEncoder, TransformerEncoderLayer
+from negative_sampling import advanced_negative_sampling
 
 # ===== TransformerOnly Model =====
 class TransformerOnly(nn.Module):
