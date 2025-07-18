@@ -1,12 +1,13 @@
 import torch
+import torch.nn as nn
 import torch.nn.functional as F
 from torch.nn import TransformerEncoder, TransformerEncoderLayer
-from negative_sampling import advanced_negative_sampling
 
-class TransformerOnly(torch.nn.Module):
+# ===== TransformerOnly Model =====
+class TransformerOnly(nn.Module):
     def __init__(self, num_nodes, in_channels, nhead=4, num_layers=2, dim_feedforward=128):
         super().__init__()
-        self.pos_embed = torch.nn.Parameter(torch.randn(num_nodes, in_channels))
+        self.pos_embed = nn.Parameter(torch.randn(num_nodes, in_channels))
         encoder_layer = TransformerEncoderLayer(
             d_model=in_channels,
             nhead=nhead,
@@ -17,30 +18,39 @@ class TransformerOnly(torch.nn.Module):
         self.transformer = TransformerEncoder(encoder_layer, num_layers=num_layers)
 
     def forward(self, x):
-        x = x + self.pos_embed.to(x.device)
-        x = x.unsqueeze(0)
+        x = x + self.pos_embed[:x.size(0)].to(x.device)
+        x = x.unsqueeze(0)  # Add batch dimension
         x = self.transformer(x)
-        return x.squeeze(0)
+        return x.squeeze(0)  # Remove batch dimension
 
-def compute_loss(model, data, embedding_layer, num_nodes, device):
-    data.x = embedding_layer(torch.arange(num_nodes, device=device))
-    emb = model(data.x)
-    src, dst = data.edge_index
-    pos = torch.sigmoid((emb[src] * emb[dst]).sum(dim=1))
-    neg_ei = advanced_negative_sampling(data.edge_index, data.num_nodes, data.edge_index)
-    neg = torch.sigmoid((emb[neg_ei[0]] * emb[neg_ei[1]]).sum(dim=1))
-    return F.binary_cross_entropy(pos, torch.ones_like(pos)) + \
-           F.binary_cross_entropy(neg, torch.zeros_like(neg))
-
-def train_step(model, data, optimizer, embedding_layer, num_nodes, device):
+# ===== Training Step =====
+def train_transformer(model, data, optimizer):
     model.train()
     optimizer.zero_grad()
-    loss = compute_loss(model, data, embedding_layer, num_nodes, device)
+    out = model(data.x)
+    src, dst = data.edge_index
+    pos_pred = torch.sigmoid((out[src] * out[dst]).sum(dim=1))
+
+    # You provide advanced_negative_sampling externally
+    neg_ei = advanced_negative_sampling(data.edge_index, data.num_nodes, data.edge_index)
+    neg_pred = torch.sigmoid((out[neg_ei[0]] * out[neg_ei[1]]).sum(dim=1))
+
+    loss = F.binary_cross_entropy(pos_pred, torch.ones_like(pos_pred)) + \
+           F.binary_cross_entropy(neg_pred, torch.zeros_like(neg_pred))
     loss.backward()
     optimizer.step()
     return loss.item()
 
-def val_step(model, data, embedding_layer, num_nodes, device):
+# ===== Validation Step =====
+def val_transformer(model, data):
     model.eval()
     with torch.no_grad():
-        return compute_loss(model, data, embedding_layer, num_nodes, device).item()
+        out = model(data.x)
+        src, dst = data.edge_index
+        pos_pred = torch.sigmoid((out[src] * out[dst]).sum(dim=1))
+        neg_ei = advanced_negative_sampling(data.edge_index, data.num_nodes, data.edge_index)
+        neg_pred = torch.sigmoid((out[neg_ei[0]] * out[neg_ei[1]]).sum(dim=1))
+
+        loss = F.binary_cross_entropy(pos_pred, torch.ones_like(pos_pred)) + \
+               F.binary_cross_entropy(neg_pred, torch.zeros_like(neg_pred))
+        return loss.item()
