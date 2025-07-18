@@ -19,19 +19,21 @@ class TransformerOnly(nn.Module):
 
     def forward(self, x):
         x = x + self.pos_embed[:x.size(0)].to(x.device)
-        x = x.unsqueeze(0)  # Add batch dimension
+        x = x.unsqueeze(0)
         x = self.transformer(x)
-        return x.squeeze(0)  # Remove batch dimension
+        return x.squeeze(0)
 
-# ===== Training Step =====
-def train_transformer(model, data, optimizer):
+# ===== Train Step =====
+def train_transformer(model, data, optimizer, embedding_layer, num_nodes, device):
     model.train()
     optimizer.zero_grad()
+    x = embedding_layer(torch.arange(num_nodes, device=device))
+    data.x = x.detach()
     out = model(data.x)
+
     src, dst = data.edge_index
     pos_pred = torch.sigmoid((out[src] * out[dst]).sum(dim=1))
 
-    # You provide advanced_negative_sampling externally
     neg_ei = advanced_negative_sampling(data.edge_index, data.num_nodes, data.edge_index)
     neg_pred = torch.sigmoid((out[neg_ei[0]] * out[neg_ei[1]]).sum(dim=1))
 
@@ -42,10 +44,13 @@ def train_transformer(model, data, optimizer):
     return loss.item()
 
 # ===== Validation Step =====
-def val_transformer(model, data):
+def val_transformer(model, data, embedding_layer, num_nodes, device):
     model.eval()
     with torch.no_grad():
+        x = embedding_layer(torch.arange(num_nodes, device=device))
+        data.x = x.detach()
         out = model(data.x)
+
         src, dst = data.edge_index
         pos_pred = torch.sigmoid((out[src] * out[dst]).sum(dim=1))
         neg_ei = advanced_negative_sampling(data.edge_index, data.num_nodes, data.edge_index)
