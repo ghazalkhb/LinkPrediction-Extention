@@ -1,7 +1,8 @@
+# diffusion_gat_core.py (new name)
+
 import torch
 import torch.nn.functional as F
 from torch_geometric.nn import APPNP, GATConv
-from negative_sampling import advanced_negative_sampling
 
 class DiffusionGAT(torch.nn.Module):
     def __init__(self, in_channels, hidden_channels, heads=2, K=10, alpha=0.1):
@@ -24,7 +25,7 @@ class DiffusionGAT(torch.nn.Module):
         self.attn1 = attn1
         return x
 
-def train(model, data, optimizer):
+def train(model, data, optimizer, advanced_negative_sampling):
     model.train()
     optimizer.zero_grad()
     out = model(data)
@@ -38,7 +39,7 @@ def train(model, data, optimizer):
     optimizer.step()
     return loss.item()
 
-def compute_loss_only(model, data):
+def compute_loss_only(model, data, advanced_negative_sampling):
     model.eval()
     with torch.no_grad():
         out = model(data)
@@ -46,5 +47,7 @@ def compute_loss_only(model, data):
         pos_pred = torch.sigmoid((out[src] * out[dst]).sum(dim=1))
         neg_ei = advanced_negative_sampling(data.edge_index, data.num_nodes, data.edge_index)
         neg_pred = torch.sigmoid((out[neg_ei[0]] * out[neg_ei[1]]).sum(dim=1))
-        return F.binary_cross_entropy(pos_pred, torch.ones_like(pos_pred)) + \
-               F.binary_cross_entropy(neg_pred, torch.zeros_like(neg_pred))
+        return (
+            F.binary_cross_entropy(pos_pred, torch.ones_like(pos_pred))
+            + F.binary_cross_entropy(neg_pred, torch.zeros_like(neg_pred))
+        ).item()
