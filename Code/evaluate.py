@@ -1,4 +1,19 @@
+import torch
+import torch.nn.functional as F
 from sklearn.metrics import roc_auc_score, precision_recall_fscore_support, accuracy_score
+import numpy as np
+from negative_sampling import advanced_negative_sampling
+
+def compute_loss_only(model, data):
+    model.eval()
+    with torch.no_grad():
+        out = model(data)
+        src, dst = data.edge_index
+        pos_pred = torch.sigmoid((out[src] * out[dst]).sum(dim=1))
+        neg_ei = advanced_negative_sampling(data.edge_index, data.num_nodes, data.edge_index)
+        neg_pred = torch.sigmoid((out[neg_ei[0]] * out[neg_ei[1]]).sum(dim=1))
+        return F.binary_cross_entropy(pos_pred, torch.ones_like(pos_pred)) + \
+               F.binary_cross_entropy(neg_pred, torch.zeros_like(neg_pred))
 
 def mean_reciprocal_rank(y_true, y_pred):
     order = np.argsort(y_pred)[::-1]
