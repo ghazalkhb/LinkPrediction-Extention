@@ -1,4 +1,3 @@
-
 # Link Prediction for Microservice Call Graphs: Temporal Windows and Scalability Tradeoffs
 
 This repository contains an implementation of link prediction models for microservice call graphs, emphasizing temporal dynamics and scalability. It implements multiple deep learning architectures, includes a third-party NodeSim module from previous research, and evaluates performance using real-world datasets.
