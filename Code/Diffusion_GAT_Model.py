@@ -1,5 +1,3 @@
-# diffusion_gat_core.py (new name)
-
 import torch
 import torch.nn.functional as F
 from torch_geometric.nn import APPNP, GATConv
