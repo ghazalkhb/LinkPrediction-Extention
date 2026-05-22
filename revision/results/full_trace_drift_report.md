@@ -4,7 +4,7 @@
 This experiment evaluates metric drift over the full available trace timeline to assess long-term stability instead of only short temporal slices.
 
 ## 2. Protocol
-- Dataset: /scratch/ghazalkh/alibaba2022_day1/CallGraph_0.csv
+- Dataset: alibaba2022_day1/CallGraph_0.csv
 - Model: GAT
 - Device: cuda
 - Window size (ms): 3600000
