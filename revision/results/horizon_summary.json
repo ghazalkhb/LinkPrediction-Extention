@@ -1,0 +1,118 @@
+{
+  "config": {
+    "model": "GAT",
+    "dataset_path": "Data/Alibaba 2022/CallGraph_0.csv",
+    "time_window_size": 100,
+    "horizons": [
+      1,
+      5,
+      10,
+      30
+    ],
+    "train_end_index": 69,
+    "test_start_index": 70,
+    "epochs": 200,
+    "seed": 0,
+    "top_k": 100
+  },
+  "train_val": [
+    {
+      "HorizonK": 1.0,
+      "TrainPairs": 55.0,
+      "ValPairs": 14.0,
+      "BestEpoch": 31.0,
+      "TrainingTimeSec": 420.5775353908539
+    },
+    {
+      "HorizonK": 5.0,
+      "TrainPairs": 52.0,
+      "ValPairs": 13.0,
+      "BestEpoch": 32.0,
+      "TrainingTimeSec": 402.80728816986084
+    },
+    {
+      "HorizonK": 10.0,
+      "TrainPairs": 48.0,
+      "ValPairs": 12.0,
+      "BestEpoch": 45.0,
+      "TrainingTimeSec": 484.5314939022064
+    },
+    {
+      "HorizonK": 30.0,
+      "TrainPairs": 32.0,
+      "ValPairs": 8.0,
+      "BestEpoch": 29.0,
+      "TrainingTimeSec": 231.49846935272217
+    }
+  ],
+  "horizon_summary": [
+    {
+      "Pairs": 1729,
+      "AUC_Mean": 0.9676586098068645,
+      "AUC_Std": 0.012659193311705978,
+      "PR_AUC_Mean": 0.9796665610854179,
+      "PR_AUC_Std": 0.007214142932359902,
+      "PrecisionAtK_Mean": 0.9995257374204743,
+      "PrecisionAtK_Std": 0.0024062652803975224,
+      "RecallAtK_Mean": 0.013663185422537569,
+      "RecallAtK_Std": 0.0011027049288894668,
+      "F1_Mean": 0.7757570730923389,
+      "F1_Std": 0.0069288342902598665,
+      "InferenceMs_Mean": 107.4817532677619,
+      "InferenceMs_Std": 26.655347382114364,
+      "HorizonK": 1,
+      "AheadMs": 100
+    },
+    {
+      "Pairs": 1725,
+      "AUC_Mean": 0.9666173870275003,
+      "AUC_Std": 0.0123314001108272,
+      "PR_AUC_Mean": 0.9791753654164139,
+      "PR_AUC_Std": 0.007052696286104903,
+      "PrecisionAtK_Mean": 0.9998376811594204,
+      "PrecisionAtK_Std": 0.0012636617426312958,
+      "RecallAtK_Mean": 0.013673029775750401,
+      "RecallAtK_Std": 0.0010963496694193161,
+      "F1_Mean": 0.7725026302343438,
+      "F1_Std": 0.006824014872079895,
+      "InferenceMs_Mean": 103.15856347820532,
+      "InferenceMs_Std": 20.117971308129817,
+      "HorizonK": 5,
+      "AheadMs": 500
+    },
+    {
+      "Pairs": 1720,
+      "AUC_Mean": 0.9643880288391579,
+      "AUC_Std": 0.016220351847766015,
+      "PR_AUC_Mean": 0.9778447503785905,
+      "PR_AUC_Std": 0.009274490974780352,
+      "PrecisionAtK_Mean": 0.9997441860465116,
+      "PrecisionAtK_Std": 0.0016152330562032885,
+      "RecallAtK_Mean": 0.013676898609773861,
+      "RecallAtK_Std": 0.0010925805367312034,
+      "F1_Mean": 0.7670564384774086,
+      "F1_Std": 0.009595895351345229,
+      "InferenceMs_Mean": 104.18274825579977,
+      "InferenceMs_Std": 19.06590309213408,
+      "HorizonK": 10,
+      "AheadMs": 1000
+    },
+    {
+      "Pairs": 1700,
+      "AUC_Mean": 0.9613621210841874,
+      "AUC_Std": 0.012298076622399541,
+      "PR_AUC_Mean": 0.976070771855058,
+      "PR_AUC_Std": 0.007131716601224103,
+      "PrecisionAtK_Mean": 0.9998235294117649,
+      "PrecisionAtK_Std": 0.0013605921772023985,
+      "RecallAtK_Mean": 0.01369368088092458,
+      "RecallAtK_Std": 0.0010827894981197763,
+      "F1_Mean": 0.7722894409825376,
+      "F1_Std": 0.006944146768443446,
+      "InferenceMs_Mean": 99.69816594120964,
+      "InferenceMs_Std": 19.145517895984085,
+      "HorizonK": 30,
+      "AheadMs": 3000
+    }
+  ]
+}

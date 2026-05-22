@@ -1,0 +1,32 @@
+[
+  {
+    "Scenario": "low_density",
+    "Pairs": 150,
+    "Seeds": 3,
+    "AUC_Mean": 0.972925192806781,
+    "AUC_Std": 0.007846860412730474,
+    "PR_AUC_Mean": 0.9827769005201541,
+    "F1_Mean": 0.7800036210103847,
+    "F1_Std": 0.004931666416705172,
+    "Precision_Mean": 0.6495455074662444,
+    "Recall_Mean": 0.9760627250198726,
+    "Accuracy_Mean": 0.7247140596123245,
+    "AvgInputEdges": 6668.8,
+    "AvgTargetEdges": 7177.48
+  },
+  {
+    "Scenario": "high_density",
+    "Pairs": 150,
+    "Seeds": 3,
+    "AUC_Mean": 0.969983764784208,
+    "AUC_Std": 0.017351913823734955,
+    "PR_AUC_Mean": 0.9807504700295723,
+    "F1_Mean": 0.7788593152989927,
+    "F1_Std": 0.008128526604748986,
+    "Precision_Mean": 0.6489163529739714,
+    "Recall_Mean": 0.9739576040328912,
+    "Accuracy_Mean": 0.7235402768294599,
+    "AvgInputEdges": 8194.76,
+    "AvgTargetEdges": 7723.52
+  }
+]

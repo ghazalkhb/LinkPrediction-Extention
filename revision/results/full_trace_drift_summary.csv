@@ -1,0 +1,2 @@
+Dataset,Model,Device,WindowSizeMs,TrainDays,EvaluatedDays,TrainSec,Pairs,AUC_Mean,AUC_Std,PR_AUC_Mean,PR_AUC_Std,F1_Mean,F1_Std,RelativeAUCDriftPct,RelativeF1DriftPct,ReadSubsampleStep
+/scratch/ghazalkh/alibaba2022_day1/CallGraph_0.csv,GAT,cuda,3600000,0.25,1,22.176952838897705,2,0.9237064965714024,0.0024113098390924903,0.999983945880669,5.034679264603881e-07,0.9935045099267074,0.0003770763292204604,0.0,0.0,1

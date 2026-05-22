@@ -1,0 +1,86 @@
+{
+  "config": {
+    "model": "GAT",
+    "dataset_path": "Data/Alibaba 2022/CallGraph_0.csv",
+    "time_window_size": 100,
+    "train_end_index": 69,
+    "val_start_index": 60,
+    "test_start_index": 70,
+    "eval_ratios": [
+      1,
+      5,
+      10,
+      50
+    ],
+    "ratio50_max_pairs": 300
+  },
+  "best_epoch": 48,
+  "training_time_sec": 310.35615634918213,
+  "summary": [
+    {
+      "Pairs": 1729.0,
+      "AUC_Mean": 0.9711571392300777,
+      "AUC_Std": 0.011447788575958405,
+      "Precision_Mean": 0.643240311550247,
+      "Precision_Std": 0.0040396568622564355,
+      "Recall_Mean": 0.9742518283918655,
+      "Recall_Std": 0.012117327442678065,
+      "F1_Mean": 0.7748619032436274,
+      "F1_Std": 0.006398690467915522,
+      "Accuracy_Mean": 0.7169675811168759,
+      "Accuracy_Std": 0.006950515706584548,
+      "AvgPosEdges": 7364.285135916715,
+      "AvgNegEdges": 7364.285135916715,
+      "NegRatio": 1.0
+    },
+    {
+      "Pairs": 1729.0,
+      "AUC_Mean": 0.9711450213633942,
+      "AUC_Std": 0.011458494913723269,
+      "Precision_Mean": 0.2649157910673543,
+      "Precision_Std": 0.0027597095558728425,
+      "Recall_Mean": 0.9742518283918655,
+      "Recall_Std": 0.012117327442678065,
+      "F1_Mean": 0.41655937342253396,
+      "F1_Std": 0.004442840480671736,
+      "Accuracy_Mean": 0.5451582607692491,
+      "Accuracy_Std": 0.003443707841468143,
+      "AvgPosEdges": 7364.285135916715,
+      "AvgNegEdges": 36821.425679583575,
+      "NegRatio": 5.0
+    },
+    {
+      "Pairs": 1729.0,
+      "AUC_Mean": 0.9711447733422802,
+      "AUC_Std": 0.0114549861574863,
+      "Precision_Mean": 0.15267870523956792,
+      "Precision_Std": 0.00179654566005276,
+      "Recall_Mean": 0.9742518283918655,
+      "Recall_Std": 0.012117327442678065,
+      "F1_Mean": 0.2639863643583875,
+      "F1_Std": 0.003104313684916715,
+      "Accuracy_Mean": 0.5061305441622901,
+      "Accuracy_Std": 0.0028087862277887572,
+      "AvgPosEdges": 7364.285135916715,
+      "AvgNegEdges": 73642.85135916715,
+      "NegRatio": 10.0
+    },
+    {
+      "Pairs": 300.0,
+      "AUC_Mean": 0.972691143725004,
+      "AUC_Std": 0.013231836301556901,
+      "Precision_Mean": 0.03492988927658525,
+      "Precision_Std": 0.0004902142926622503,
+      "Recall_Mean": 0.9759396367691695,
+      "Recall_Std": 0.013760374844891794,
+      "F1_Mean": 0.06744578926402663,
+      "F1_Std": 0.0009455283107986344,
+      "Accuracy_Mean": 0.47081909744371747,
+      "Accuracy_Std": 0.002094522154472959,
+      "AvgPosEdges": 7726.593333333333,
+      "AvgNegEdges": 386329.6666666667,
+      "NegRatio": 50.0
+    }
+  ],
+  "all_nonedge_note": "All-non-edges testing is not computationally feasible under current dataset scale or configured limits. Feasibility thresholds: max_nodes=3000, max_negatives=2000000."
+}

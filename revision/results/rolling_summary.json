@@ -1,0 +1,64 @@
+{
+  "config": {
+    "model": "GAT",
+    "dataset_path": "Data\\Alibaba 2022\\CallGraph_0.csv",
+    "time_window_size": 100,
+    "embedding_dim": 64,
+    "train_end_index": 69,
+    "val_start_index": 60,
+    "test_start_index": 70,
+    "last_test_input_index": 1799,
+    "epochs": 200,
+    "seed": 0
+  },
+  "counts": {
+    "num_windows": 1801,
+    "num_nodes": 17658,
+    "train_pairs": 60,
+    "val_pairs": 9,
+    "test_pairs_evaluated": 1729
+  },
+  "timing_sec": {
+    "training": 448.2515,
+    "evaluation": 196.6065,
+    "total": 794.4912
+  },
+  "aggregate_metrics": {
+    "AUC": {
+      "mean": 0.970696028007755,
+      "std": 0.0120625222557386,
+      "min": 0.8360710111737705,
+      "max": 0.9887067713920952
+    },
+    "Precision": {
+      "mean": 0.6478672567077741,
+      "std": 0.004076084599043904,
+      "min": 0.6094904125941953,
+      "max": 0.6581196581196581
+    },
+    "Recall": {
+      "mean": 0.9737745348837193,
+      "std": 0.01299597537352397,
+      "min": 0.8186191001102315,
+      "max": 0.9917203311867525
+    },
+    "F1": {
+      "mean": 0.7780544871348882,
+      "std": 0.006733458962262051,
+      "min": 0.6987426225301514,
+      "max": 0.7904420273084934
+    },
+    "Accuracy": {
+      "mean": 0.7222708111229554,
+      "std": 0.007153821482278046,
+      "min": 0.6470588235294118,
+      "max": 0.7376502969723309
+    },
+    "MRR": {
+      "mean": 0.9982648930017352,
+      "std": 0.029403110427929535,
+      "min": 0.5,
+      "max": 1.0
+    }
+  }
+}

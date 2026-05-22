@@ -1,0 +1,53 @@
+{
+  "datasets": [
+    {
+      "Dataset": "Alibaba 2021",
+      "Path": "Data\\MSCallGraph_0.csv",
+      "WindowSize": 100.0,
+      "RawRows": 6088846,
+      "RowsAfterBadLineRemoval": 6088846,
+      "RowsAfterDropna": 6018598,
+      "RemovedPct": 1.1537161557378854,
+      "UniqueServices": 7393,
+      "UniqueDirectedEdges": 16566,
+      "NumWindows": 3000,
+      "MeanEdgesPerWindow": 2006.1993333333332,
+      "MedianEdgesPerWindow": 1917.5,
+      "EdgeDensity": 0.0003031342389519043,
+      "RuntimeSec": 20.297339916229248
+    },
+    {
+      "Dataset": "Alibaba 2022",
+      "Path": "Data\\Alibaba 2022\\CallGraph_0.csv",
+      "WindowSize": 100.0,
+      "RawRows": 13332356,
+      "RowsAfterBadLineRemoval": 13332085,
+      "RowsAfterDropna": 13332085,
+      "RemovedPct": 0.0020326489931711995,
+      "UniqueServices": 17687,
+      "UniqueDirectedEdges": 58583,
+      "NumWindows": 1800,
+      "MeanEdgesPerWindow": 7406.7138888888885,
+      "MedianEdgesPerWindow": 7334.5,
+      "EdgeDensity": 0.00018727845219325499,
+      "RuntimeSec": 51.362244606018066
+    },
+    {
+      "Dataset": "Huawei 2021",
+      "Path": "Data\\Huawei\\status_1min_20210411.csv",
+      "WindowSize": 100.0,
+      "RawRows": 465933,
+      "RowsAfterBadLineRemoval": 465933,
+      "RowsAfterDropna": 465933,
+      "RemovedPct": 0.0,
+      "UniqueServices": 82,
+      "UniqueDirectedEdges": 292,
+      "NumWindows": 2351,
+      "MeanEdgesPerWindow": 198.18502764780945,
+      "MedianEdgesPerWindow": 0.0,
+      "EdgeDensity": 0.04396266184884071,
+      "RuntimeSec": 2.6424999237060547
+    }
+  ],
+  "generatedAt": "2026-05-14 12:42:42"
+}

@@ -1,33 +1,31 @@
-# Link Prediction for Microservice Call Graphs: Temporal Windows and Scalability Tradeoffs
+﻿# Link Prediction for Microservice Call Graphs: Temporal Windows and Scalability Tradeoffs
 
-This repository contains an implementation of link prediction models for microservice call graphs, emphasizing temporal dynamics and scalability. It implements multiple deep learning architectures, includes a third-party NodeSim module from previous research, and evaluates performance using real-world datasets.
+This repository contains the implementation for the paper *"Temporal Graph Models for Predictive Monitoring in Microservices"* (under review, EMSE). It includes the original model implementations and a full set of revised-paper experiments covering strict temporal evaluation, imbalanced testing, ranking metrics, multi-horizon forecasting, statistical significance, cross-dataset robustness, and runtime analysis.
 
 ## Table of Contents
 
 - [Overview](#overview)
 - [Project Structure](#project-structure)
 - [Models Implemented](#models-implemented)
+- [Revision Experiments](#revision-experiments)
 - [Datasets](#datasets)
-- [Features](#features)
 - [Installation](#installation)
 - [Usage](#usage)
 - [Results](#results)
-- [Paper](#paper)
-- [Contributing](#contributing)
 
 ## Overview
 
-This project addresses the challenge of predicting future connections in microservice call graphs through temporal network analysis. Key aspects include:
+This project predicts future service interactions in microservice call graphs using temporal graph neural networks. Key aspects:
 
-- **Multiple Model Architectures**: GAT, Diffusion, Transformer, LSTM, hybrid models, and NodeSim.
-- **Temporal Window Processing**: Dynamic segmentation of call graphs based on timestamps.
-- **Advanced Negative Sampling**: Sophisticated strategies to enhance training.
-- **Evaluation Metrics**: AUC, MRR, Precision, Recall, F1-score, Accuracy.
+- **Strict temporal evaluation**: rolling `G_t → G_{t+1}` forecasting protocol (no data leakage)
+- **Multiple model architectures**: GAT, Diffusion, Transformer, LSTM, hybrid models, NodeSim
+- **Comprehensive evaluation**: AUC, MRR, Precision@K, Recall@K, PR-AUC, F1 under varying imbalance ratios
+- **Multi-horizon forecasting**: `G_t → G_{t+k}` for k = 1, 5, 10, 30
+- **Three production datasets**: Alibaba 2021, Alibaba 2022, Huawei 2021
 
 ## Project Structure
 
 ```
-LinkPrediction-Extention-main/
 ├── Code/
 │   ├── LinkPrediction.ipynb          # Main experiments notebook
 │   ├── evaluate.py                   # Evaluation functions
@@ -40,117 +38,131 @@ LinkPrediction-Extention-main/
 │   │   └── Transformer_GAT_Model.py
 │   ├── LSTM/
 │   │   └── main.py
-│   └── NodeSim/                      # External module from another paper
-│       ├── src/
-│       ├── Input/
-│       ├── Output/
-│       └── Adjusted/
-├── Paper/
-│   └── Link_Prediction_for_Microservice_Call_Graphs_Temporal_Windows_and_Scalability_Tradeoffs.pdf
-└── Results/
-    ├── Results final.pdf             # Partial evaluation results
-    ├── StandaloneDiffusion.zip
-    └── transformer.zip
+│   └── NodeSim/                      # Third-party node similarity module
+│
+├── revision/                         # Revised-paper experiments (new)
+│   ├── rolling_gt_to_gt1_experiment.py
+│   ├── horizon_gt_to_gtk_experiment.py
+│   ├── imbalanced_negative_evaluation.py
+│   ├── ranking_evaluation.py
+│   ├── training_testing_gap_experiment.py
+│   ├── temporal_slice_sensitivity.py
+│   ├── overlap_fair_experiment.py
+│   ├── cross_dataset_robustness.py
+│   ├── paired_statistical_tests.py
+│   ├── runtime_measurement_breakdown.py
+│   ├── recurring_activity_experiment.py
+│   ├── full_trace_drift_experiment.py
+│   ├── downstream_operational_proxy_experiment.py
+│   ├── preprocessing_dataset_statistics.py
+│   ├── degree_aware_sampling.py
+│   ├── run_all_experiments.py
+│   ├── build_full_revision_report.py
+│   ├── narval/                       # HPC cluster submission scripts (SLURM)
+│   └── results/                      # All experiment outputs (CSV, JSON, MD)
+│
+└── Results/                          # Original paper results
 ```
 
 ## Models Implemented
 
-### 1. **Graph Attention Network (GAT)**
-- **File**: `Code/Models/GNN_Model.py`
-- **Features**: Multi-head attention, edge-aware.
+| Model | File | Notes |
+|---|---|---|
+| GAT | `Code/Models/GNN_Model.py` | Primary model; best accuracy/speed tradeoff |
+| Diffusion | `Code/Models/Standalone_Diffusion_Model.py` | Global diffusion propagation |
+| DiffusionGAT | `Code/Models/Diffusion_GAT_Model.py` | Hybrid |
+| Transformer | `Code/Models/Standalone_Transformer_Model.py` | Highest AUC, ~30x slower |
+| TransformerGAT | `Code/Models/Transformer_GAT_Model.py` | Hybrid |
+| LSTM | `Code/LSTM/main.py` | Sequential baseline |
+| NodeSim | `Code/NodeSim/` | Third-party, community-aware embeddings |
 
-### 2. **Diffusion Model**
-- **File**: `Code/Models/Standalone_Diffusion_Model.py`
-- **Features**: Global diffusion-based information propagation.
+## Revision Experiments
 
-### 3. **Transformer Model**
-- **File**: `Code/Models/Standalone_Transformer_Model.py`
-- **Features**: Self-attention, positional encoding.
+All scripts are in `revision/`. Each writes its outputs to `revision/results/`.
 
-### 4. **LSTM Model**
-- **File**: `Code/LSTM/main.py`
-- **Features**: Sequential modeling, temporal dependencies.
+| Script | What it tests |
+|---|---|
+| `rolling_gt_to_gt1_experiment.py` | Strict rolling evaluation (1,729 forecast instances on Alibaba 2022) |
+| `horizon_gt_to_gtk_experiment.py` | Multi-horizon forecasting (k = 1, 5, 10, 30) |
+| `imbalanced_negative_evaluation.py` | Test-time imbalance sensitivity (1:1 to 1:50 negative ratios) |
+| `ranking_evaluation.py` | Ranking metrics: Hits@K, Precision@K, MRR, PR-AUC (1:50 degree-aware negatives) |
+| `training_testing_gap_experiment.py` | Prediction degradation as train/test gap grows |
+| `temporal_slice_sensitivity.py` | Effect of time-window size and overlap ratio |
+| `overlap_fair_experiment.py` | Fair comparison: overlapping vs non-overlapping windows |
+| `cross_dataset_robustness.py` | Unified protocol across Alibaba 2021, 2022, Huawei 2021 |
+| `paired_statistical_tests.py` | Matched paired t-test + Wilcoxon, n=145 (5 seeds x 29 windows) |
+| `runtime_measurement_breakdown.py` | Forward pass, training epoch, end-to-end latency breakdown |
+| `recurring_activity_experiment.py` | Effect of recurring call patterns on prediction quality |
+| `full_trace_drift_experiment.py` | Distribution shift over full trace duration |
+| `downstream_operational_proxy_experiment.py` | Proxy for downstream operational value |
+| `preprocessing_dataset_statistics.py` | Dataset statistics (nodes, edges, density, window counts) |
+| `degree_aware_sampling.py` | Degree-aware negative sampling utility |
+| `run_all_experiments.py` | Runs all the above in sequence |
+| `build_full_revision_report.py` | Aggregates all results/ into a single markdown report |
 
-### 5. **Hybrid Models**
-- **Diffusion + GAT**: `Diffusion_GAT_Model.py`
-- **Transformer + GAT**: `Transformer_GAT_Model.py`
-- **Features**: Combines multiple architectures' strengths.
+### Key Results (Alibaba 2022, corrected rolling protocol)
 
-### 6. **NodeSim** *(Third-party Integration)*
-- **Directory**: `Code/NodeSim/`
-- **Note**: Adapted from existing work for community-aware embeddings.
-- **Use Case**: Node similarity enhancement.
+| Experiment | Key finding |
+|---|---|
+| Rolling evaluation (GAT, k=1) | AUC = 0.971, MRR = 0.998, F1 = 0.778, 1,729 forecast instances |
+| Ranking (1:50 negatives) | PR-AUC = 0.880, Precision@100 = 0.992, MRR = 0.978 |
+| Imbalance (1:10) | F1 drops to 0.26; AUC remains stable (~0.97) |
+| Multi-horizon (k=30) | AUC = 0.961 (-0.007 from k=1); Precision@100 ~= 1.0 |
+| Cross-dataset | Alibaba 2021: AUC = 0.976; Huawei 2021: AUC = 0.577 |
+| Statistical tests | GAT > DiffusionGAT: p < 1e-82, d_z = -3.53; n=145 |
+| Runtime (GAT) | Forward 9.5 ms/window; end-to-end ~143 ms/forecast instance |
+
+### Running the Revision Experiments
+
+```bash
+# Run a single experiment
+python revision/rolling_gt_to_gt1_experiment.py --data-path Data/MSCallGraph_0.csv
+
+# Run all experiments
+python revision/run_all_experiments.py --data-path Data/MSCallGraph_0.csv
+
+# Build the combined report
+python revision/build_full_revision_report.py
+```
+
+Use `python revision/<script>.py --help` to see all available arguments.
+
+For HPC/SLURM clusters, see `revision/narval/`.
 
 ## Datasets
 
-The experiments use publicly available datasets:
-- [Alibaba Microservices 2022](https://github.com/alibaba/clusterdata/tree/master/cluster-trace-microservices-v2022)
-- [Alibaba Microservices 2021](https://github.com/alibaba/clusterdata/tree/master/cluster-trace-microservices-v2021)
-- [Huawei Cloud Trace](https://zenodo.org/record/5638238)
-
-## Features
-
-- **Temporal Processing**: Configurable time windows, dynamic graph handling.
-- **Advanced Training**: Negative sampling, cross-validation, multi-seed experiments.
-- **Evaluation Metrics**: Robust performance measurement with multiple criteria.
+| Dataset | Source |
+|---|---|
+| Alibaba Microservices 2022 | https://github.com/alibaba/clusterdata/tree/master/cluster-trace-microservices-v2022 |
+| Alibaba Microservices 2021 | https://github.com/alibaba/clusterdata/tree/master/cluster-trace-microservices-v2021 |
+| Huawei Cloud Trace 2021 | https://zenodo.org/record/5638238 |
 
 ## Installation
 
-### Prerequisites
-- Python 3.8+
-- PyTorch 1.9+
-- PyTorch Geometric
-- TensorFlow 2.x
-- NetworkX, NumPy, Pandas, Scikit-learn
-
-### Setup
 ```bash
-git clone <repository-url>
-cd LinkPrediction-Extention-main
+git clone https://github.com/ghazalkhb/LinkPrediction-Extention.git
+cd LinkPrediction-Extention
 
-# PyTorch Geometric
-pip install torch_geometric
-
-# TensorFlow for LSTM
-pip install tensorflow
-
-# Other dependencies
-pip install networkx numpy pandas scikit-learn matplotlib
+pip install torch torch_geometric
+pip install networkx numpy pandas scikit-learn matplotlib scipy
 ```
 
 ## Usage
 
-### Main Notebook
-Run experiments via the provided notebook:
-
+**Original notebook (Code/):**
 ```bash
 jupyter notebook Code/LinkPrediction.ipynb
 ```
 
-### Model Selection
-In the notebook, select your model:
-
-```python
-selected_model = "GAT"  # Options: "GAT", "Diffusion", "DiffusionGAT", "Transformer", "TransformerGAT", "LSTM"
-```
-
-### NodeSim Module Usage
-
+**Revision experiments (revision/):**
 ```bash
-cd Code/NodeSim/src
-python main.py --input Input/sample.txt --output Output/sample.emb --dimensions 128
+python revision/rolling_gt_to_gt1_experiment.py --data-path Data/MSCallGraph_0.csv
+python revision/horizon_gt_to_gtk_experiment.py --data-path Data/MSCallGraph_0.csv
+python revision/run_all_experiments.py --data-path Data/MSCallGraph_0.csv
 ```
 
 ## Results
 
-The provided results (`Results final.pdf`) are a subset demonstrating key findings and metrics, as full results are extensive. Additional detailed outcomes are compressed into zip files for specific models.
+Detailed per-experiment results are in `revision/results/` as `.csv`, `.json`, and `.md` files. `revision/FULL_EXPERIMENT_REPORT.md` aggregates all findings.
 
-## Paper
-
-The accompanying research paper offers a comprehensive analysis, including methodology, experiments, temporal windowing effects, and scalability trade-offs.
-
-See: [Paper PDF](Paper/Link_Prediction_for_Microservice_Call_Graphs_Temporal_Windows_and_Scalability_Tradeoffs.pdf)
-
-## Contributing
-
-Contributions, suggestions, and improvements are welcome. Please fork the repository, create your branch, and submit a pull request.
+Original partial results are in `Results/`.

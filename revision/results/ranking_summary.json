@@ -1,0 +1,35 @@
+{
+  "config": {
+    "model": "GAT",
+    "dataset_path": "Data/Alibaba 2022/CallGraph_0.csv",
+    "time_window_size": 100,
+    "train_end_index": 69,
+    "val_start_index": 60,
+    "test_start_index": 70,
+    "candidate_neg_ratio": 50,
+    "seed": 0
+  },
+  "best_epoch": 39,
+  "training_time_sec": 261.73639035224915,
+  "summary": {
+    "Pairs": 1729.0,
+    "PR_AUC_Mean": 0.880187540990529,
+    "PR_AUC_Std": 0.02155335325116732,
+    "MRR_Mean": 0.9783015230383652,
+    "MRR_Std": 0.1051363894433682,
+    "HitsAt10_Mean": 1.0,
+    "HitsAt10_Std": 0.0,
+    "HitsAt50_Mean": 1.0,
+    "HitsAt50_Std": 0.0,
+    "HitsAt100_Mean": 1.0,
+    "HitsAt100_Std": 0.0,
+    "PrecisionAt10_Mean": 0.9835743204164258,
+    "PrecisionAt10_Std": 0.048894728218461865,
+    "PrecisionAt50_Mean": 0.990399074609601,
+    "PrecisionAt50_Std": 0.017002443238156386,
+    "PrecisionAt100_Mean": 0.9923308270676693,
+    "PrecisionAt100_Std": 0.01068792735571104,
+    "AvgPosEdges": 7364.285135916715,
+    "AvgNegEdges": 368214.25679583574
+  }
+}
