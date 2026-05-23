@@ -137,15 +137,6 @@ For HPC/SLURM clusters, see `revision/narval/`.
 | Alibaba Microservices 2021 | https://github.com/alibaba/clusterdata/tree/master/cluster-trace-microservices-v2021 |
 | Huawei Cloud Trace 2021 | https://zenodo.org/record/5638238 |
 
-## Installation
-
-```bash
-git clone https://github.com/ghazalkhb/LinkPrediction-Extention.git
-cd LinkPrediction-Extention
-
-pip install torch torch_geometric
-pip install networkx numpy pandas scikit-learn matplotlib scipy
-```
 
 ## Usage
 
