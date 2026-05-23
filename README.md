@@ -1,6 +1,6 @@
 ﻿# Link Prediction for Microservice Call Graphs: Temporal Windows and Scalability Tradeoffs
 
-This repository contains the implementation for the paper *"Temporal Graph Models for Predictive Monitoring in Microservices"* (under review, EMSE). It includes the original model implementations and a full set of revised-paper experiments covering strict temporal evaluation, imbalanced testing, ranking metrics, multi-horizon forecasting, statistical significance, cross-dataset robustness, and runtime analysis.
+This repository contains the implementation for the paper *"Temporal Graph Models for Predictive Monitoring in Microservices"*. It includes the original model implementations and a full set of revised-paper experiments covering strict temporal evaluation, imbalanced testing, ranking metrics, multi-horizon forecasting, statistical significance, cross-dataset robustness, and runtime analysis.
 
 ## Table of Contents
 
